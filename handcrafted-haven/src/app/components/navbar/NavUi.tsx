@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import Link from "next/link";
 import React from "react";
@@ -7,17 +7,24 @@ import {
   IconButton,
   Spinner,
   Input,
-  Button,
 } from "@material-tailwind/react";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon, XMarkIcon, HeartIcon } from "@heroicons/react/24/outline";
 import ProfileMenu from "../ProfileMenu";
 import { MobileNav } from "../MobileNav";
 import CartIcon from "../CartIcon";
-import { UserCircleIcon, ShoppingBagIcon} from "@heroicons/react/24/outline"; 
+import {
+  UserCircleIcon,
+  ShoppingBagIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/24/outline";
 import useAuth from "@hooks/useAuth";
+import SearchForm from "../SearchForm";
+import Image from 'next/image';
+import logo from './logo.png';
 
 interface Props {
   cartItemsCount: number;
+  avatar?: string;
 }
 
 export const menuItems = [
@@ -31,9 +38,14 @@ export const menuItems = [
     icon: <ShoppingBagIcon className="h-4 w-4" />,
     label: "Orders",
   },
+  {
+    href: "/profile/wishlist",
+    icon: <HeartIcon className="h-4 w-4" />,
+    label: "Wishlist",
+  },
 ];
 
-export default function NavUI({ cartItemsCount }: Props) {
+export default function NavUI({ cartItemsCount, avatar }: Props) {
   const [open, setOpen] = React.useState(false);
   const { loading, loggedIn } = useAuth();
 
@@ -47,70 +59,38 @@ export default function NavUI({ cartItemsCount }: Props) {
     <>
       <MaterialNav className="mx-auto max-w-screen-xl px-4 py-2">
         <div className="flex items-center justify-between text-blue-gray-900">
-          <Link
-            href="/"
-            className="mr-4 cursor-pointer py-1.5 lg:ml-2 font-semibold"
-          >
-            HandcraftedHaven
+          <Link href="/" className="cursor-pointer font-semibold">
+          <Image src={logo} alt="Logo" width={90} height={70} />
           </Link>
-            <div className="hidden lg:flex gap-2 items-center">
-                <div className="relative flex w-full gap-2 md:w-max">
-                    <Input
-                        type="search"
-                        placeholder="Quick Search..."
-                        containerProps={{
-                            className: "min-w-[288px]",
-                        }}
-                        className=" !border-t-blue-gray-300 pl-9 placeholder:text-blue-gray-300 focus:!border-blue-gray-300"
-                        labelProps={{
-                            className: "before:content-none after:content-none",
-                        }}
-                    />
-                    <div className="!absolute left-3 top-[13px]">
-                    <svg
-                            width="13"
-                            height="14"
-                            viewBox="0 0 14 15"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path
-                            d="M9.97811 7.95252C10.2126 7.38634 10.3333 6.7795 10.3333 6.16667C10.3333 4.92899 9.84167 3.742 8.9665 2.86683C8.09133 1.99167 6.90434 1.5 5.66667 1.5C4.42899 1.5 3.242 1.99167 2.36683 2.86683C1.49167 3.742 1 4.92899 1 6.16667C1 6.7795 1.12071 7.38634 1.35523 7.95252C1.58975 8.51871 1.93349 9.03316 2.36683 9.4665C2.80018 9.89984 3.31462 10.2436 3.88081 10.4781C4.447 10.7126 5.05383 10.8333 5.66667 10.8333C6.2795 10.8333 6.88634 10.7126 7.45252 10.4781C8.01871 10.2436 8.53316 9.89984 8.9665 9.4665C9.39984 9.03316 9.74358 8.51871 9.97811 7.95252Z"
-                            fill="#CFD8DC"
-                            />
-                            <path
-                            d="M13 13.5L9 9.5M10.3333 6.16667C10.3333 6.7795 10.2126 7.38634 9.97811 7.95252C9.74358 8.51871 9.39984 9.03316 8.9665 9.4665C8.53316 9.89984 8.01871 10.2436 7.45252 10.4781C6.88634 10.7126 6.2795 10.8333 5.66667 10.8333C5.05383 10.8333 4.447 10.7126 3.88081 10.4781C3.31462 10.2436 2.80018 9.89984 2.36683 9.4665C1.93349 9.03316 1.58975 8.51871 1.35523 7.95252C1.12071 7.38634 1 6.7795 1 6.16667C1 4.92899 1.49167 3.742 2.36683 2.86683C3.242 1.99167 4.42899 1.5 5.66667 1.5C6.90434 1.5 8.09133 1.99167 8.9665 2.86683C9.84167 3.742 10.3333 4.92899 10.3333 6.16667Z"
-                            stroke="#CFD8DC"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            />
-                        </svg>
-                    </div>
-                </div>
-                    <Button size="md" className="rounded-lg ">
-                        Search
-                    </Button>
-                <CartIcon cartItems={cartItemsCount} />
-                {loggedIn ? (
-                <ProfileMenu menuItems={menuItems} />
-                ) : loading ? (
-                <Spinner />
-                ) : (
-                <>
-                    <Link className="px-4 py-1" href="/auth/signin">
-                    Sign in
-                    </Link>
-                    <Link
-                    className="bg-blue-500 text-white px-4 py-1 rounded"
-                    href="/auth/signup"
-                  >
-                    Sign up
-                    </Link>
-                </>
-                )}
+
+          <div className="flex-1 flex justify-center">
+            <div className="md:w-96 w-full md:mx-0 mx-4 ">
+              <SearchForm submitTo="/search?query=" />
             </div>
-            <div className="lg:hidden flex items-center space-x-2">
+          </div>
+
+          <div className="hidden lg:flex gap-2 items-center">
+            <CartIcon cartItems={cartItemsCount} />
+            {loggedIn ? (
+              <ProfileMenu menuItems={menuItems} avatar={avatar} />
+            ) : loading ? (
+              <Spinner />
+            ) : (
+              <>
+                <Link className="px-4 py-1" href="/auth/signin">
+                  Sign in
+                </Link>
+                <Link
+                  className="bg-blue-500 text-white px-4 py-1 rounded"
+                  href="/auth/signup"
+                >
+                  Sign up
+                </Link>
+              </>
+            )}
+          </div>
+
+          <div className="lg:hidden flex items-center space-x-2">
             <CartIcon cartItems={cartItemsCount} />
 
             <IconButton
@@ -127,7 +107,7 @@ export default function NavUI({ cartItemsCount }: Props) {
             </IconButton>
           </div>
         </div>
-        </MaterialNav>
+      </MaterialNav>
       <div className="lg:hidden">
         <MobileNav
           menuItems={menuItems}
