@@ -69,7 +69,7 @@ export const POST = async (req: Request) => {
       line_items,
       success_url: process.env.PAYMENT_SUCCESS_URL!,
       cancel_url: process.env.PAYMENT_CANCEL_URL!,
-      shipping_address_collection: { allowed_countries: ["ZW", "US", "VE", "PE"] },
+      shipping_address_collection: { allowed_countries: ["ZW", "US", "VE", "PE", "PY"] },
       customer: customer.id,
     };
 
