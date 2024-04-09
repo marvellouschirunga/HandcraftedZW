@@ -19,6 +19,8 @@ import {
 } from "@heroicons/react/24/outline";
 import useAuth from "@hooks/useAuth";
 import SearchForm from "../SearchForm";
+import Image from 'next/image';
+import logo from './logo.png';
 
 interface Props {
   cartItemsCount: number;
@@ -57,8 +59,8 @@ export default function NavUI({ cartItemsCount, avatar }: Props) {
     <>
       <MaterialNav className="mx-auto max-w-screen-xl px-4 py-2">
         <div className="flex items-center justify-between text-blue-gray-900">
-          <Link href="/" className="cursor-pointer font-semibold">
-            HandcraftedHaven
+        <Link href="/" className="cursor-pointer font-semibold">
+          <Image src={logo} alt="Logo" width={90} height={70} />
           </Link>
 
           <div className="flex-1 flex justify-center">
